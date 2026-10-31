@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nicole's Universal Birthday</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Pacifico&family=Satisfy&family=Nunito+Sans:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Pacifico&family=Satisfy&family=Open+Sans:wght@400;600;700&display=swap">
 <style>
 /* Layout: full-bleed hero image with the portrait overlaid, then the trip intro, then the packing checklist in category groups */
 :root {
@@ -20,7 +20,7 @@
   --done: #2f8f6a;
   --font-display: "Oswald", "Arial Narrow", Impact, sans-serif;
   --font-script: "Pacifico", "Brush Script MT", cursive;
-  --font-body: "Nunito Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Open Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
@@ -38,7 +38,7 @@ body { background: var(--bg); color-scheme: light; color: var(--fg); font-family
   padding-left: max(32px, env(safe-area-inset-left, 0px));
   padding-right: max(32px, env(safe-area-inset-right, 0px));
   padding-block: 32px 64px;
-  display: grid; gap: 40px;
+  display: grid; gap: 72px;
 }
 
 /* Intro */
@@ -186,7 +186,7 @@ body { background: var(--bg); color-scheme: light; color: var(--fg); font-family
 const LIST = [
   // Each item: [stable id, name, subtext, deletable?]
   { id: "clothes", title: "Clothes", items: [
-    ["outfits", "Breathable outfits", ""],
+    ["outfits", "Breathable outfits", "It'll be high 70s low 50s so dress accordingly"],
     ["dinner", "One nice dinner outfit", "Think classy restaurant outfit for dinner"],
     ["meme", "Meme shirt", ""],
     ["jacket", "Light jacket or hoodie", ""],
