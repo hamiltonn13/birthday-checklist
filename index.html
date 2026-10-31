@@ -61,13 +61,13 @@ body { background: var(--bg); color-scheme: light; color: var(--fg); font-family
 .itin ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border-top: 1px solid var(--line); }
 .itin li { display: grid; align-content: start; gap: 4px; padding: 14px 16px; min-width: 0; }
 .itin li + li { border-left: 1px solid var(--line); }
-.itin .date { font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+.itin .date { white-space: nowrap; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
 .itin .plan { min-width: 0; }
 .itin .plan small { display: block; color: var(--muted); font-size: .87rem; }
 @media (max-width: 720px) {
   /* Thin rows: date on the left, plan + subtext stacked and left-aligned on the right */
-  .itin ol { grid-template-columns: 1fr; }
-  .itin li:nth-child(n) { grid-template-columns: 4.5rem minmax(0, 1fr); align-items: start; column-gap: 12px; padding: 8px 16px; border-left: 0; border-top: 0; }
+  .itin ol { grid-template-columns: auto minmax(0, 1fr); column-gap: 12px; }
+  .itin li:nth-child(n) { grid-column: 1 / -1; grid-template-columns: subgrid; column-gap: 12px; align-items: start; padding: 8px 16px; border-left: 0; border-top: 0; }
   .itin li + li { border-top: 1px solid var(--line); }
   .itin .plan, .itin .plan small { line-height: 1.3; }
 }
@@ -151,7 +151,7 @@ body { background: var(--bg); color-scheme: light; color: var(--fg); font-family
       <li><span class="date">Nov 10</span><span class="plan">Arrival</span></li>
       <li><span class="date">Nov 11</span><span class="plan">Flex Day<small>Epic Universe in the evening</small></span></li>
       <li><span class="date">Nov 12</span><span class="plan">Park Day</span></li>
-      <li><span class="date">Nov 13</span><span class="plan">Park Day<small>Nice dinner planned</small></span></li>
+      <li><span class="date">Nov 13</span><span class="plan">Birthday Park Day! 👑<small>Nice dinner planned</small></span></li>
       <li><span class="date">Nov 14</span><span class="plan">Park Day</span></li>
       <li><span class="date">Nov 15</span><span class="plan">Flex Day &amp; Departure</span></li>
       </ol>
@@ -202,6 +202,7 @@ const LIST = [
     ["charger", "Charger and battery pack", ""],
     ["id", "ID and credit card", ""],
     ["sunscreen", "Sunscreen", ""],
+    ["sunglasses", "Sunglasses", ""],
     ["hat", "Hat", ""],
     ["poncho", "Poncho", "In case of rain"],
     ["sanitizer", "Hand sanitizer", ""],
