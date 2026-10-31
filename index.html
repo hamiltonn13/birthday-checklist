@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nicole's Universal Birthday</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Pacifico&family=Satisfy&family=Nunito+Sans:wght@400;600;700&display=swap">
+<style>
+/* Layout: full-bleed hero image with the portrait overlaid, then the trip intro, then the packing checklist in category groups */
+:root {
+  --bg: #ffffff;
+  --surface: #f7f6fd;
+  --fg: #17162a;
+  --muted: #64618a;
+  --line: #dddaf0;
+  --accent: #6c67c9;
+  --accent-soft: #e7e5f8;
+  --kicker: #a29dff;
+  --done: #2f8f6a;
+  --font-display: "Oswald", "Arial Narrow", Impact, sans-serif;
+  --font-script: "Pacifico", "Brush Script MT", cursive;
+  --font-body: "Nunito Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color-scheme: light; color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.55; }
+
+.hero { background: #ffffff; line-height: 0; position: relative; }
+.hero .bg { display: block; width: 100%; max-width: 100%; height: auto; }
+/* Portrait travels on scroll: small beside "Nicole's" → curves down to the U/N. Default (no JS) is the end spot. */
+.hero .me { position: absolute; width: var(--me-w, 15.4%); max-width: 100%; height: auto; left: var(--me-x, 12.1%); top: var(--me-y, 89.7%); transform: translate(-50%, -50%) rotate(var(--me-r, -15deg)); filter: drop-shadow(var(--me-sx, -1.55px) var(--me-sy, 5.8px) 8px rgba(30, 22, 90, .5)); will-change: left, top, width, transform; }
+
+.wrap {
+  max-width: 880px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+  display: grid; gap: 40px;
+}
+
+/* Intro */
+.intro { display: block; }
+.intro .kicker { font-family: "Satisfy", var(--font-script); font-weight: 400; color: var(--kicker); font-size: 1.6rem; line-height: 1.2; }
+.intro h1 { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: .01em; font-size: clamp(2rem, 6vw, 3rem); line-height: 1.05; margin: 4px 0 12px; text-wrap: balance; }
+.intro p { margin: 0; max-width: 60ch; color: var(--muted); }
+/* Itinerary: progressive disclosure */
+.intro > div { width: fit-content; max-width: 100%; }
+/* Paragraph takes the headline's width; itinerary spans the full column like the packing list */
+.intro p { contain: inline-size; }
+.itin { margin-top: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.itin summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; font-weight: 700; border-radius: 12px; }
+.itin summary::-webkit-details-marker { display: none; }
+.itin summary .hint { font-weight: 600; font-size: .85rem; color: var(--muted); }
+.itin summary .chev { width: 12px; height: 12px; fill: var(--accent); stroke: var(--accent); stroke-width: 3; stroke-linejoin: round; transition: transform .2s ease; flex: none; overflow: visible; }
+.itin[open] summary .chev { transform: rotate(90deg); }
+.itin summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.itin .row-wrap { display: flex; align-items: center; gap: 12px; }
+.itin ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.itin li { display: grid; align-content: start; gap: 4px; padding: 14px 16px; min-width: 0; }
+.itin li + li { border-left: 1px solid var(--line); }
+.itin .date { font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+.itin .plan { min-width: 0; }
+.itin .plan small { display: block; color: var(--muted); font-size: .87rem; }
+@media (max-width: 720px) {
+  /* Thin rows: date on the left, plan + subtext stacked and left-aligned on the right */
+  .itin ol { grid-template-columns: 1fr; }
+  .itin li:nth-child(n) { grid-template-columns: 4.5rem minmax(0, 1fr); align-items: start; column-gap: 12px; padding: 8px 16px; border-left: 0; border-top: 0; }
+  .itin li + li { border-top: 1px solid var(--line); }
+  .itin .plan, .itin .plan small { line-height: 1.3; }
+}
+
+/* Checklist header */
+.list-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; border-bottom: 2px solid var(--fg); padding-bottom: 12px; }
+.list-head h2 { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; font-size: 1.9rem; line-height: 1; margin: 0; }
+.list-head p { margin: 6px 0 0; color: var(--muted); font-size: .95rem; }
+.overall { min-width: 0; display: grid; gap: 6px; justify-items: end; }
+.overall .count { font-family: var(--font-display); font-size: 1.4rem; font-variant-numeric: tabular-nums; }
+.overall .count small { font-family: var(--font-body); font-size: .85rem; color: var(--muted); margin-left: 4px; }
+.bar { width: 200px; max-width: 100%; height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.bar span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s ease; }
+
+.cats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "clothes bag" "health bag"; grid-template-rows: auto 1fr; gap: 20px; align-items: start; }
+.cat-clothes { grid-area: clothes; } .cat-bag { grid-area: bag; } .cat-health { grid-area: health; }
+.cat { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 18px 10px; min-width: 0; }
+.cat-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+.cat h3 { font-family: var(--font-display); font-weight: 500; text-transform: uppercase; letter-spacing: .04em; font-size: 1.15rem; margin: 0; }
+.cat .tally { font-size: .85rem; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cat.complete .tally { color: var(--done); }
+.cat ul { list-style: none; margin: 0; padding: 0; }
+.cat li + li { border-top: 1px solid var(--line); }
+.item { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; padding: 10px 0; cursor: pointer; }
+.item input { appearance: none; width: 22px; height: 22px; margin: 1px 0 0; border: 2px solid var(--muted); border-radius: 6px; display: grid; place-content: center; cursor: pointer; background: var(--surface); transition: background .15s, border-color .15s; }
+.item input::after { content: ""; width: 10px; height: 6px; border-left: 2.5px solid #fff; border-bottom: 2.5px solid #fff; transform: rotate(-45deg) translate(1px, -1px); opacity: 0; }
+.item input:checked { background: var(--done); border-color: var(--done); }
+.item input:checked::after { opacity: 1; }
+.item input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.item .label { min-width: 0; }
+.item .name { font-weight: 600; }
+.item .note { display: block; font-size: .87rem; color: var(--muted); }
+.item input:checked + .label .name { text-decoration: line-through; color: var(--muted); }
+/* Custom items: delete button + add row */
+.cat li.custom { display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 8px; }
+.del { font: inherit; width: 30px; height: 30px; margin-top: 6px; border: 0; border-radius: 8px; background: none; color: var(--muted); cursor: pointer; display: grid; place-items: center; }
+.del:hover { background: var(--accent-soft); color: #c2415b; }
+.del:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+.del svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; fill: none; }
+.add { display: flex; gap: 8px; padding: 10px 0 8px; border-top: 1px solid var(--line); }
+.add input { flex: 1; min-width: 0; font: inherit; font-size: .95rem; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
+.add input::placeholder { color: var(--muted); }
+.add input:focus-visible { outline: 3px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
+.add button { font: inherit; font-size: .9rem; font-weight: 700; color: #fff; background: var(--accent); border: 0; border-radius: 8px; padding: 7px 14px; cursor: pointer; }
+.add button:disabled { opacity: .45; cursor: default; }
+.add button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.tips { background: var(--accent-soft); border-radius: 14px; padding: 18px 20px; }
+.tips h3 { font-family: var(--font-display); font-weight: 500; text-transform: uppercase; letter-spacing: .04em; font-size: 1.15rem; margin: 0 0 8px; }
+.tips ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+
+.reset { justify-self: start; font: inherit; font-size: .9rem; font-weight: 600; color: var(--muted); background: none; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.reset:hover { color: var(--fg); border-color: var(--muted); }
+.reset:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.reset.confirm { color: #fff; background: #c2415b; border-color: #c2415b; }
+
+@media (max-width: 640px) {
+  .cats { grid-template-columns: 1fr; grid-template-areas: "clothes" "bag" "health"; grid-template-rows: auto; }
+  .overall { justify-items: start; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <img class="bg" src="assets/Hero-NoPikmin.png" alt="Nicole's 29th birthday to Universal" width="2399" height="1522">
+  <img class="me" src="assets/Little%20Me.png" alt="Illustration of Nicole smiling in round glasses" width="635" height="635">
+</header>
+
+<main class="wrap">
+  <section class="intro">
+    <div>
+      <div class="kicker">Pack your bags, friends!</div>
+      <h1>We're going to Universal Orlando</h1>
+      <p>Thank you so much for celebrating with me in Orlando! Use this to help plan your trip and get ready to have the best time. I love you so much!</p>
+    </div>
+    <details class="itin" id="itinerary">
+      <summary><span class="row-wrap"><svg class="chev" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="M3 1.8 L10 6 L3 10.2 Z"></path></svg><span>Trip itinerary</span></span><span class="hint">Nov 10 – 15</span></summary>
+      <ol>
+      <li><span class="date">Nov 10</span><span class="plan">Arrival</span></li>
+      <li><span class="date">Nov 11</span><span class="plan">Flex Day<small>Epic Universe in the evening</small></span></li>
+      <li><span class="date">Nov 12</span><span class="plan">Park Day</span></li>
+      <li><span class="date">Nov 13</span><span class="plan">Park Day<small>Nice dinner planned</small></span></li>
+      <li><span class="date">Nov 14</span><span class="plan">Park Day</span></li>
+      <li><span class="date">Nov 15</span><span class="plan">Flex Day &amp; Departure</span></li>
+      </ol>
+    </details>
+  </section>
+
+  <section style="display:grid;gap:20px">
+    <div class="list-head">
+      <div>
+        <h2>Packing list</h2>
+        <p>Tap an item to check it off, or add your own. Your list is saved in this browser.</p>
+      </div>
+      <div class="overall">
+        <div class="count" id="overallCount">0 / 0<small>packed</small></div>
+        <div class="bar"><span id="overallBar"></span></div>
+      </div>
+    </div>
+    <div class="cats" id="cats"></div>
+    <div class="tips">
+      <h3>Good to know for the parks</h3>
+      <ul>
+        <li>Expect to be walking a lot this weekend, so get what you need to prepare your feet.</li>
+        <li>You can buy merch at the park and have it shipped straight to your hotel room.</li>
+        <li>Have a great time! 🎉</li>
+      </ul>
+    </div>
+    <button class="reset" id="reset" type="button">Clear all checks</button>
+  </section>
+</main>
+
+<script>
+const LIST = [
+  // Each item: [stable id, name, subtext, deletable?]
+  { id: "clothes", title: "Clothes", items: [
+    ["outfits", "Breathable outfits", ""],
+    ["dinner", "One nice dinner outfit", "Think classy restaurant outfit for dinner"],
+    ["meme", "Meme shirt", ""],
+    ["jacket", "Light jacket or hoodie", ""],
+    ["travel", "Travel day fit", ""],
+    ["pjs", "Comfy pajamas", ""],
+    ["undies", "Underwear and socks", ""],
+    ["swim", "Swimsuit", ""],
+    ["shoes", "Walking shoes", "And orthotic insoles if you have them"],
+    ["slides", "Slides", "For the hotel"]
+  ]},
+  { id: "bag", title: "Park day essentials", items: [
+    ["pack", "Fanny pack or crossbody bag", "Keep it small"],
+    ["charger", "Charger and battery pack", ""],
+    ["id", "ID and credit card", ""],
+    ["sunscreen", "Sunscreen", ""],
+    ["hat", "Hat", ""],
+    ["poncho", "Poncho", "In case of rain"],
+    ["sanitizer", "Hand sanitizer", ""],
+    ["snacks", "Snacks", ""],
+    ["fan", "Portable fan", "In the event it is hot, but likely not needed"],
+    ["wands", "Universal wands", "If you happen to own one", true]
+  ]},
+  { id: "health", title: "Toiletries & health", items: [
+    ["toiletries", "Toiletries & medication", ""],
+    ["motion", "Motion sickness medicine", ""],
+    ["aloe", "Aloe", ""],
+    ["hairties", "Hair ties", ""]
+  ]}
+];
+const KEY = "nicole-universal-packing-v2";
+let state = {};
+try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { state = {}; }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+const CKEY = "nicole-universal-custom";
+const HKEY = "nicole-universal-hidden";   // built-in items someone deleted (e.g. wands)
+let hidden = [];
+try { hidden = JSON.parse(localStorage.getItem(HKEY) || "[]") || []; } catch (e) { hidden = []; }
+function saveHidden() { try { localStorage.setItem(HKEY, JSON.stringify(hidden)); } catch (e) {} }
+let custom = {};
+try { custom = JSON.parse(localStorage.getItem(CKEY) || "{}") || {}; } catch (e) { custom = {}; }
+function saveCustom() { try { localStorage.setItem(CKEY, JSON.stringify(custom)); } catch (e) {} }
+
+const DEL_ICON = '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 3l8 8M11 3l-8 8"></path></svg>';
+
+function makeItem(id, name, note, isCustom, catId, builtIn) {
+  const li = document.createElement("li");
+  if (isCustom) li.className = "custom";
+  li.innerHTML = `<label class="item" for="${id}"><input type="checkbox" id="${id}"><span class="label"><span class="name"></span>${note ? '<span class="note"></span>' : ''}</span></label>`;
+  li.querySelector(".name").textContent = name;
+  if (note) li.querySelector(".note").textContent = note;
+  const box = li.querySelector("input");
+  box.checked = !!state[id];
+  box.addEventListener("change", () => { state[id] = box.checked; save(); update(); });
+  if (isCustom) {
+    const del = document.createElement("button");
+    del.type = "button"; del.className = "del"; del.innerHTML = DEL_ICON;
+    del.setAttribute("aria-label", `Delete ${name}`);
+    del.addEventListener("click", () => {
+      if (builtIn) { hidden.push(id); saveHidden(); }
+      else { custom[catId] = (custom[catId] || []).filter(c => c.id !== id); saveCustom(); }
+      delete state[id]; save();
+      const next = li.nextElementSibling || li.previousElementSibling;
+      li.remove(); update();
+      (next && next.querySelector("input, button") || document.getElementById(`add-${catId}`)).focus();
+    });
+    li.appendChild(del);
+  }
+  return li;
+}
+
+const cats = document.getElementById("cats");
+LIST.forEach(cat => {
+  const sec = document.createElement("section");
+  sec.className = `cat cat-${cat.id}`; sec.dataset.cat = cat.id;
+  sec.innerHTML = `<div class="cat-head"><h3>${cat.title}</h3><span class="tally"></span></div><ul></ul>
+    <form class="add" autocomplete="off"><input id="add-${cat.id}" type="text" maxlength="80" placeholder="Add an item" aria-label="Add an item to ${cat.title}"><button type="submit" disabled>Add</button></form>`;
+  const ul = sec.querySelector("ul");
+  cat.items.forEach(([key, name, note, deletable]) => {
+    const id = `${cat.id}-${key}`;
+    if (deletable && hidden.includes(id)) return;
+    ul.appendChild(makeItem(id, name, note, !!deletable, cat.id, !!deletable));
+  });
+  (custom[cat.id] || []).forEach(c => ul.appendChild(makeItem(c.id, c.name, "", true, cat.id)));
+  const form = sec.querySelector("form"), input = form.querySelector("input"), btn = form.querySelector("button");
+  input.addEventListener("input", () => { btn.disabled = !input.value.trim(); });
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const name = input.value.trim();
+    if (!name) return;
+    const id = `${cat.id}-c${Date.now().toString(36)}`;
+    (custom[cat.id] = custom[cat.id] || []).push({ id, name });
+    saveCustom();
+    ul.appendChild(makeItem(id, name, "", true, cat.id));
+    input.value = ""; btn.disabled = true; input.focus();
+    update();
+  });
+  cats.appendChild(sec);
+});
+
+function update() {
+  let total = 0, done = 0;
+  document.querySelectorAll(".cat").forEach(sec => {
+    const boxes = sec.querySelectorAll('input[type="checkbox"]');
+    const d = [...boxes].filter(b => b.checked).length;
+    total += boxes.length; done += d;
+    sec.querySelector(".tally").textContent = d === boxes.length ? `All ${d} packed` : `${d} / ${boxes.length}`;
+    sec.classList.toggle("complete", d === boxes.length);
+  });
+  document.getElementById("overallCount").innerHTML = `${done} / ${total}<small>packed</small>`;
+  document.getElementById("overallBar").style.width = (total ? done / total * 100 : 0) + "%";
+}
+update();
+
+const reset = document.getElementById("reset");
+let armed = false, timer;
+reset.addEventListener("click", () => {
+  if (!armed) {
+    armed = true; reset.classList.add("confirm"); reset.textContent = "Tap again to clear";
+    timer = setTimeout(() => { armed = false; reset.classList.remove("confirm"); reset.textContent = "Clear all checks"; }, 3000);
+    return;
+  }
+  clearTimeout(timer); armed = false;
+  state = {}; save();
+  document.querySelectorAll('.cat input[type="checkbox"]').forEach(b => b.checked = false);
+  reset.classList.remove("confirm"); reset.textContent = "Clear all checks";
+  update();
+});
+
+// Scroll-linked portrait path (hero percentages)
+(function () {
+  const hero = document.querySelector(".hero");
+  const me = hero.querySelector(".me");
+  const START = { x: 29.8, y: 42.9, w: 7, r: 0 };     // just left of "Nicole's"
+  const END   = { x: 12.1, y: 89.7, w: 15.4, r: -15 };  // under the U and N
+  // Inward curve: control point bows toward the middle of the hero. Its y sits halfway,
+  // so the portrait's height changes at an even rate and keeps pace with the scroll.
+  const CTRL  = { x: 36, y: (START.y + END.y) / 2 };
+  let raf = null, landed = false;   // once it lands under the U and N, it stays there until reload
+
+  function apply() {
+    raf = null;
+    const travel = (END.y - START.y) / 100 * hero.offsetHeight; // page distance the portrait drops
+    let t = Math.min(Math.max(window.scrollY / travel, 0), 1);
+    if (t >= 1) landed = true;
+    if (landed) t = 1;
+    const u = 1 - t;
+    const x = u * u * START.x + 2 * u * t * CTRL.x + t * t * END.x;
+    const y = u * u * START.y + 2 * u * t * CTRL.y + t * t * END.y;
+    const w = START.w + (END.w - START.w) * t;
+    const r = START.r + (END.r - START.r) * t;
+    const a = -r * Math.PI / 180, d = 2 + 4 * t;      // keep the shadow falling straight down
+    me.style.setProperty("--me-x", x + "%");
+    me.style.setProperty("--me-y", y + "%");
+    me.style.setProperty("--me-w", w + "%");
+    me.style.setProperty("--me-r", r + "deg");
+    me.style.setProperty("--me-sx", (-d * Math.sin(a)).toFixed(2) + "px");
+    me.style.setProperty("--me-sy", (d * Math.cos(a)).toFixed(2) + "px");
+  }
+  function schedule() { if (!raf) raf = requestAnimationFrame(apply); }
+  apply();
+  window.addEventListener("scroll", schedule, { passive: true });
+  window.addEventListener("resize", schedule);
+  if (document.readyState !== "complete") window.addEventListener("load", schedule);
+})();
+</script>
+</body>
+</html>
