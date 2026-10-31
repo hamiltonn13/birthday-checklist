@@ -30,7 +30,7 @@ body { background: var(--bg); color-scheme: light; color: var(--fg); font-family
 
 .hero { background: #ffffff; line-height: 0; position: relative; }
 .hero .bg { display: block; width: 100%; max-width: 100%; height: auto; }
-/* Portrait travels on scroll: small beside "Nicole's" → curves down to the U/N. Default (no JS) is the end spot. */
+/* Portrait travels on scroll: above "Nicole's 29th birthday to" → curves down to the U/N. Default (no JS) is the end spot. */
 .hero .me { position: absolute; width: var(--me-w, 15.4%); max-width: 100%; height: auto; left: var(--me-x, 12.1%); top: var(--me-y, 89.7%); transform: translate(-50%, -50%) rotate(var(--me-r, -15deg)); filter: drop-shadow(var(--me-sx, -1.55px) var(--me-sy, 5.8px) 8px rgba(30, 22, 90, .5)); will-change: left, top, width, transform; }
 
 .wrap {
@@ -320,7 +320,7 @@ reset.addEventListener("click", () => {
 (function () {
   const hero = document.querySelector(".hero");
   const me = hero.querySelector(".me");
-  const START = { x: 29.8, y: 42.9, w: 7, r: 0 };     // just left of "Nicole's"
+  const START = { x: 48.3, y: 21, w: 18, r: 0 };    // centered above "Nicole's 29th birthday to"
   const END   = { x: 12.1, y: 89.7, w: 15.4, r: -15 };  // under the U and N
   // Inward curve: control point bows toward the middle of the hero. Its y sits halfway,
   // so the portrait's height changes at an even rate and keeps pace with the scroll.
